@@ -39,3 +39,6 @@ class LogicGiveDeliveryItemsCommand(Writer):
         self.writeVInt(0)
         self.writeVInt(0)
         self.writeLogicLong(0)
+
+    def getCommandType(self) -> int:
+        return 203
