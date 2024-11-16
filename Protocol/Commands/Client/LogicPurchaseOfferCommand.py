@@ -1,6 +1,7 @@
 from ByteStream.Reader import Reader
 from Logic.Home.LogicShopData import LogicShopData
 from Protocol.Messages.Server.AvailableServerCommandMessage import AvailableServerCommandMessage
+from Protocol.Commands.Server.LogicGiveDeliveryItemsCommand import LogicGiveDeliveryItemsCommand
 
 class LogicPurchaseOfferCommand(Reader):
     def __init__(self, client, player, initial_bytes):
@@ -110,4 +111,4 @@ class LogicPurchaseOfferCommand(Reader):
 
             self.player.db = db
 
-            AvailableServerCommandMessage(self.client, self.player, 203).send()
+            AvailableServerCommandMessage(self.client, self.player, LogicGiveDeliveryItemsCommand).send()
