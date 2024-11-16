@@ -1,4 +1,5 @@
 from Utils.Helpers import Helpers
+import traceback
 
 class Writer:
     def __init__(self, client, endian: str = 'big'):
@@ -47,17 +48,20 @@ class Writer:
             self.buffer += bytes.fromhex(''.join(data.split()).replace('-', ''))
 
     def send(self):
-        self.encode()
-        packet = self.buffer
-        self.buffer = self.id.to_bytes(2, 'big', signed=True)
-        self.writeInt(len(packet), 3)
-        if hasattr(self, 'version'):
-            self.writeInt16(self.version)
-        else:
-            self.writeInt16(0)
-        self.buffer += packet + b'\xff\xff\x00\x00\x00\x00\x00'
-        self.client.send(self.buffer)
-        print(f'{Helpers.yellow}[SERVER] PacketID: {self.id}, Name: {type(self).__name__}, Length: {len(self.buffer)}')
+        try:
+            self.encode()
+            packet = self.buffer
+            self.buffer = self.id.to_bytes(2, 'big', signed=True)
+            self.writeInt(len(packet), 3)
+            if hasattr(self, 'version'):
+                self.writeInt16(self.version)
+            else:
+                self.writeInt16(0)
+            self.buffer += packet + b'\xff\xff\x00\x00\x00\x00\x00'
+            self.client.send(self.buffer)
+            print(f'{Helpers.yellow}[SERVER] PacketID: {self.id}, Name: {type(self).__name__}, Length: {len(self.buffer)}')
+        except Exception:
+            print(traceback.format_exc())
 
 
     def sendByID(self, ID):
@@ -72,8 +76,8 @@ class Writer:
                 self.writeInt16(0)
             self.buffer += packet + b'\xff\xff\x00\x00\x00\x00\x00'
             Helpers.connected_clients["Clients"][str(ID)]["SocketInfo"].send(self.buffer)
-        except:
-            pass
+        except Exception:
+            print(traceback.format_exc())
 
     def writeVInt(self, data, rotate: bool = True):
         final = b''
