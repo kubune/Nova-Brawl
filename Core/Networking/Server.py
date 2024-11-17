@@ -15,7 +15,7 @@ class Server:
 
     def __init__(self, ip: str, port: int):
         self.config = json.loads(open('config.json', 'r').read())
-        self.db = MongoDB(self.config['MongoConnectionURL'])
+        self.db = MongoDB()
         self.server = socket.socket()
         self.port = port
         self.ip = ip
