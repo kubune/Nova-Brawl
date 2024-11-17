@@ -1,29 +1,11 @@
-import json
 import datetime
 from DataBase.MongoUtils import MongoUtils
 from Logic.Player import Player
-from Utils.Helpers import Helpers
-
 
 class MongoDB:
-    def __init__(self, db_path):
-        self.utils = MongoUtils(db_path)
-        self.player = Player
-
-        self.utils.cursor.execute('''
-            CREATE TABLE IF NOT EXISTS Players (
-                ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                Token TEXT UNIQUE NOT NULL,
-                Data TEXT
-            )
-        ''')
-        self.utils.cursor.execute('''
-            CREATE TABLE IF NOT EXISTS Clubs (
-                ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                Data TEXT
-            )
-        ''')
-        self.utils.conn.commit()
+    def __init__(self):
+        self.players = MongoUtils("players.sqlite")
+        self.clubs = MongoUtils("clubs.sqlite")
 
         self.data = {
             'Name': 'Guest',
@@ -35,7 +17,7 @@ class MongoDB:
             'TokenDoubler': 0,
             'HighestTrophies': Player.high_trophies,
             'HomeBrawler': 0,
-            'TrophyRoadReward': 1,
+            'TrophyRoadReward': 300,
             'ExperiencePoints': Player.exp_points,
             'ProfileIcon': 0,
             'NameColor': 0,
@@ -48,69 +30,49 @@ class MongoDB:
             'SelectedSkins': Player.selected_skins,
             'SelectedBrawler': 0,
             'Region': Player.region,
-            'SupportedContentCreator': "Classic Brawl",
+            'SupportedContentCreator': "Nova Brawl",
             'StarPower': Player.starpower,
             'Gadget': Player.gadget,
             'BrawlPassActivated': False,
             'WelcomeMessageViewed': False,
             'ClubID': 0,
             'ClubRole': 1,
-            'TimeStamp': str(datetime.datetime.now())
-        }
-
-        self.club_data = {
-            'Name': '',
-            'Description': '',
-            'Region': '',
-            'BadgeID': 0,
-            'Type': 0,
-            'Trophies': 0,
-            'RequiredTrophies': 0,
-            'FamilyFriendly': 0,
-            'Members': [],
-            'Messages': []
+            'TimeStamp': str(datetime.datetime.now()),
         }
 
     def create_player_account(self, id, token):
-        auth = {'ID': id, 'Token': token, 'Data': json.dumps(self.data)}
-        self.utils.insert_data('Players', auth)
+        auth = {
+            'ID': id,
+            'Token': token,
+        }
+        auth.update(self.data)
+        self.players.insert_data("Players", auth)
 
-    def load_player_account(self, id, token):
-        result = self.utils.load_document('Players', {'Token': token})
+    def load_player_account(self, token):
+        result = self.players.fetch_one("Players", {"Token": token})
         if result:
-            player_data = json.loads(result[2])
-            for key in self.data:
-                if key not in player_data:
-                    player_data[key] = self.data[key]
-            return player_data
+            return result
+        return None
 
-    def update_player_account(self, token, item, value):
-        result = self.utils.load_document('Players', {'Token': token})
-        if result:
-            player_data = json.loads(result[2])
-            player_data[item] = value
-            self.utils.update_document('Players', {'Token': token}, 'Data', json.dumps(player_data))
+    def update_player_account(self, token, updates):
+        self.players.update_data("Players", {"Token": token}, updates)
 
-    def delete_player(self, token):
-        self.utils.delete_document('Players', {'Token': token})
+    def delete_player_account(self, token):
+        self.players.delete_data("Players", {"Token": token})
 
     def create_club(self, id, data):
-        club = {'ID': id, 'Data': json.dumps(data)}
-        self.utils.insert_data('Clubs', club)
+        data["ID"] = id
+        self.clubs.insert_data("Clubs", data)
 
     def load_club(self, id):
-        result = self.utils.load_document('Clubs', {'ID': id})
-        return json.loads(result[1]) if result else None
+        return self.clubs.fetch_one("Clubs", {"ID": id})
 
-    def update_club(self, id, item, value):
-        result = self.utils.load_document('Clubs', {'ID': id})
-        if result:
-            club_data = json.loads(result[1])
-            club_data[item] = value
-            self.utils.update_document('Clubs', {'ID': id}, 'Data', json.dumps(club_data))
+    def update_club(self, id, updates):
+        self.clubs.update_data("Clubs", {"ID": id}, updates)
 
     def delete_club(self, id):
-        self.utils.delete_document('Clubs', {'ID': id})
+        self.clubs.delete_data("Clubs", {"ID": id})
 
     def close(self):
-        self.utils.close()
+        self.players.close_connection()
+        self.clubs.close_connection()
