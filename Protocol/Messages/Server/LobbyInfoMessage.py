@@ -10,7 +10,7 @@ class LobbyInfoMessage(Writer):
 
     def encode(self):
         self.writeVInt(self.count)
-        self.writeString("Classic Brawl v2.0")
+        self.writeString("Nova Brawl v0.1")
 
         self.writeVInt(0) # array
         for x in range(0):

@@ -28,6 +28,7 @@ packets = {
     14103: StartGameMessage,
     10108: KeepAliveMessage,
     10212: SetNameMessage,
+    
     14102: EndClientTurnMessage,
     14109: GoHomeFromOfflinePractiseMessage,
     14110: AskForBattleEndMessage,
@@ -47,6 +48,6 @@ packets = {
     14372: TeamToggleSettingsMessage,
     14403: GetLeaderboardMessage,
     14600: AvatarNameCheckRequestMessage,
+    
     18686: SetSupportedCreatorMessage,
-
 }
