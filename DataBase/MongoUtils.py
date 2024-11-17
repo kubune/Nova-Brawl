@@ -5,11 +5,57 @@ class MongoUtils:
     def __init__(self, db_path):
         self.db_path = db_path
         self.local = local()
+        self.init_schema()
 
     def get_connection(self):
         if not hasattr(self.local, 'connection'):
             self.local.connection = sqlite3.connect(self.db_path)
         return self.local.connection
+
+
+    def init_schema(self):
+        connection = self.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS Players (
+                ID INTEGER PRIMARY KEY,
+                Token TEXT NOT NULL,
+                Name TEXT DEFAULT 'Guest',
+                NameSet BOOLEAN DEFAULT 0,
+                Gems INTEGER DEFAULT 0,
+                Trophies INTEGER DEFAULT 0,
+                Tickets INTEGER DEFAULT 0,
+                Resources TEXT DEFAULT '{}',
+                TokenDoubler INTEGER DEFAULT 0,
+                HighestTrophies INTEGER DEFAULT 0,
+                HomeBrawler INTEGER DEFAULT 0,
+                TrophyRoadReward INTEGER DEFAULT 300,
+                ExperiencePoints INTEGER DEFAULT 0,
+                ProfileIcon INTEGER DEFAULT 0,
+                NameColor INTEGER DEFAULT 0,
+                UnlockedBrawlers TEXT DEFAULT '{}',
+                BrawlersTrophies TEXT DEFAULT '{}',
+                BrawlersHighestTrophies TEXT DEFAULT '{}',
+                BrawlersLevel TEXT DEFAULT '{}',
+                BrawlersPowerPoints TEXT DEFAULT '{}',
+                UnlockedSkins TEXT DEFAULT '{}',
+                SelectedSkins TEXT DEFAULT '{}',
+                SelectedBrawler INTEGER DEFAULT 0,
+                Region TEXT DEFAULT '',
+                SupportedContentCreator TEXT DEFAULT '',
+                StarPower TEXT DEFAULT '{}',
+                Gadget TEXT DEFAULT '{}',
+                BrawlPassActivated BOOLEAN DEFAULT 0,
+                WelcomeMessageViewed BOOLEAN DEFAULT 0,
+                ClubID INTEGER DEFAULT 0,
+                ClubRole INTEGER DEFAULT 1,
+                TimeStamp TEXT DEFAULT ''
+            )
+            """)
+            connection.commit()
+        finally:
+            cursor.close()
 
     def close_connection(self):
         if hasattr(self.local, 'connection'):
