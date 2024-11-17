@@ -1,0 +1,6 @@
+Rename Mongo stuff to Sqlite3 stuff.
+Change database structure.
+Move packets to respective directories.
+Update ByteStream to a better one (or 8hacc will do it earlier then I'll just sync fork)
+
+soon...
