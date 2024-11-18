@@ -33,7 +33,7 @@ class Player:
     name_color = 0
     selected_brawler = 0
     region = settings['Region']
-    content_creator = "Modern Brawl"
+    content_creator = "Nova Brawl"
     name_set = False
     name = 'Guest'
     map_id = 0

@@ -9,9 +9,9 @@ class TeamMessage(Writer):
         self.player = player
 
     def encode(self):
-        self.writeVInt(1)
+        self.writeVInt(1) # room type ig
         self.writeUInt8(0)
-        self.writeVInt(1)
+        self.writeVInt(1) # max players in team
         self.writeLong(Helpers().randomMapID())
         self.writeUInt8(0)
         self.writeUInt8(0)
@@ -21,7 +21,7 @@ class TeamMessage(Writer):
         self.writeDataReference(15, self.player.map_id)
 
         self.writeVInt(1)
-        for x in range(1):
+        for x in range(1): # for player in team :skull:
 
             self.writeVInt(1)
 

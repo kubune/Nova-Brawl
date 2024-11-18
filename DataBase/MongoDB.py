@@ -4,7 +4,6 @@ import datetime
 from DataBase.MongoUtils import MongoUtils
 from Logic.Player import Player
 import json
-import bson
 from Utils.Helpers import Helpers
 
 
@@ -21,6 +20,7 @@ class MongoDB:
 
         self.database = self.client['Classic-Brawl']
         self.players = self.database['Players']
+        
         self.clubs = self.database['Clubs']
         self.mongo_utils = MongoUtils()
 
@@ -69,6 +69,10 @@ class MongoDB:
             'Members': [],
             'Messages': []
         }
+        
+        self.team_data = {
+            
+        }
 
     def merge(self, dict1, dict2):
         return (dict1.update(dict2))
@@ -81,7 +85,6 @@ class MongoDB:
         }
 
         auth.update(self.data)
-
         self.mongo_utils.insert_data(self.players, auth)
 
 
@@ -181,3 +184,6 @@ class MongoDB:
     def delete_club(self, id):
         query = {"ID": id}
         self.mongo_utils.delete_document(self.clubs, query)
+        
+    def get_new_id(self):
+        return self.players.count_documents({}) + 1

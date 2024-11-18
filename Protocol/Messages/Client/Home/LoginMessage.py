@@ -36,7 +36,7 @@ class LoginMessage(Reader):
             LoginFailedMessage(self.client, self.player, "").send()
 
         if self.account_id == 0:
-            self.player.ID    = self.helpers.randomID()
+            self.player.ID = db.get_new_id()
             self.player.token = self.helpers.randomToken()
             db.create_player_account(self.player.ID, self.player.token)
 

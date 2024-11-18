@@ -1,5 +1,5 @@
 Change database structure.
-Add team chat and commands temporary handler.
+Add commands handler to team chat.
 Extract some data into json.
 
 soon...
