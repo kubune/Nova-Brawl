@@ -15,7 +15,11 @@ class Server:
 
     def __init__(self, ip: str, port: int):
         self.config = json.loads(open('config.json', 'r').read())
-        self.db = MongoDB(self.config['MongoConnectionURL'])
+        if self.config['MongoConnectionURL'] == "":
+            self.mongo = json.loads(open('.env', 'r').read())['MongoConnectionURL']
+        else:
+            self.mongo = self.config['MongoConnectionURL']
+        self.db = MongoDB(self.mongo)
         self.server = socket.socket()
         self.port = port
         self.ip = ip

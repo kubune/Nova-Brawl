@@ -8,7 +8,8 @@ Simple Brawl Stars v26.184 server emulator written in Python.
 
 ### Requirements:
 - Python 3.7 or higher
-- sqlite3
+- pymongo
+- dnspython
 - colorama
 
 ### Running the server

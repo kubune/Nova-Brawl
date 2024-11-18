@@ -39,16 +39,16 @@
          "Items": [
             {
                "OfferID": 6,
-               "Amount": 10
+               "Amount": 1
             },
             {
-               "OfferID": 1,
-               "Amount": 69
+               "OfferID": 16,
+               "Amount": 10
             }
          ],
-         "Cost": 15,
-         "OfferBackground": "offer_xmas",
-         "Title": "Welcome to Classic Brawl!"
+         "Cost": 1,
+         "OfferBackground": "offer_generic",
+         "Title": "Nova Brawl"
       }
    ]
 }
