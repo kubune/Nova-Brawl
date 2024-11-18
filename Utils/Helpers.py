@@ -42,7 +42,7 @@ class Helpers:
                 "ExperiencePoints": 999999,
                 "BrawlBoxTokens": 99999,
                 "BigBoxTokens": 99999,
-                "Region": "RO",
+                "Region": "PL",
                 "ThemeID": 0,
                 "Maintenance": False,
                 "SecondsTillMaintenanceOver": 3600

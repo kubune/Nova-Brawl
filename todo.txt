@@ -1,6 +1,6 @@
-
 Change database structure.
 Move packets to respective directories.
-Update ByteStream to a better one (or 8hacc will do it earlier then I'll just sync fork)
+Add team chat and commands temporary handler.
+Extract some data into json.
 
 soon...
