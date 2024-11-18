@@ -1,5 +1,4 @@
 Change database structure.
-Move packets to respective directories.
 Add team chat and commands temporary handler.
 Extract some data into json.
 

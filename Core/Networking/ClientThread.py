@@ -5,8 +5,8 @@ from Logic.Player import Player
 from Logic.Device import Device
 from Utils.Helpers import Helpers
 from Protocol.LogicLaserMessageFactory import packets
-from Protocol.Messages.Server.LobbyInfoMessage import LobbyInfoMessage
-from Protocol.Messages.Server.LoginFailedMessage import LoginFailedMessage
+from Protocol.Messages.Server.Home.LobbyInfoMessage import LobbyInfoMessage
+from Protocol.Messages.Server.Home.LoginFailedMessage import LoginFailedMessage
 
 def _(*args):
     for arg in args:

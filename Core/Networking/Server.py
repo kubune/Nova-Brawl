@@ -3,7 +3,7 @@ import socket
 from Utils.Helpers import Helpers
 from DataBase.MongoDB import MongoDB
 from Core.Networking.ClientThread import ClientThread
-from Protocol.Messages.Server.LoginFailedMessage import LoginFailedMessage
+from Protocol.Messages.Server.Home.LoginFailedMessage import LoginFailedMessage
 
 def _(*args):
     for arg in args:
