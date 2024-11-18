@@ -12,7 +12,7 @@ class TeamMessage(Writer):
         self.writeVInt(1) # room type ig
         self.writeUInt8(0)
         self.writeVInt(1) # max players in team
-        self.writeLong(Helpers().randomMapID())
+        self.writeLong(1) # Team ID
         self.writeUInt8(0)
         self.writeUInt8(0)
         self.writeVInt(0)
