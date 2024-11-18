@@ -1,5 +1,6 @@
 Change database structure.
 Add commands handler to team chat.
+Fix TeamStream
 Extract some data into json.
 
 soon...
