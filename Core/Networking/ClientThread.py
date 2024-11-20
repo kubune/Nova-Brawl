@@ -8,6 +8,8 @@ from Protocol.LogicLaserMessageFactory import packets
 from Protocol.Messages.Server.Home.LobbyInfoMessage import LobbyInfoMessage
 from Protocol.Messages.Server.Home.LoginFailedMessage import LoginFailedMessage
 
+from DataBase.MongoDB import MongoDB
+
 def _(*args):
     for arg in args:
         print(arg, end=' ')
@@ -23,6 +25,7 @@ class ClientThread(Thread):
         self.config = json.loads(open('config.json', 'r').read())
         self.device = Device(self.client)
         self.player = Player(self.device)
+
 
 
     def recvall(self, length: int):
@@ -68,7 +71,17 @@ class ClientThread(Thread):
 
                         message = packets[packet_id](self.client, self.player, packet_data)
                         message.decode()
-                        message.process(self.db)
+                        
+                        returnData = message.process(self.db)
+                        try:
+                            if returnData[0] == 'ChangeServer':
+                                if self.config['MongoConnectionURL'] == "":
+                                    self.mongo = json.loads(open('.env', 'r').read())['MongoConnectionURL']
+                                else:
+                                    self.mongo = self.config['MongoConnectionURL']
+                                self.db = MongoDB(self.mongo, server=returnData[1], acc_data=returnData[3])
+                        except:
+                            pass
 
                         if packet_id == 10101:
                             Helpers.connected_clients["Clients"][str(self.player.ID)] = {"SocketInfo": self.client}

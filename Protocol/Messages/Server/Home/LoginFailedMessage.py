@@ -11,6 +11,9 @@ class LoginFailedMessage(Writer):
         self.msg = msg
         self.fingerprint = Fingerprint.loadFinger_full("GameAssets/fingerprint.json")
 
+        if len(msg) > 1:
+            self.player.err_code = 1
+        
         """
         << Error Code List >>
         # 1  = Custom Message

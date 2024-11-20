@@ -3,4 +3,6 @@ Add commands handler to team chat.
 Fix TeamStream
 Extract some data into json.
 
+! Make fully working server switcher.
+
 soon...

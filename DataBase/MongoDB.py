@@ -8,7 +8,7 @@ from Utils.Helpers import Helpers
 
 
 class MongoDB:
-    def __init__(self, conn_str):
+    def __init__(self, conn_str, server = 'main'):
         self.player = Player
         self.client = pymongo.MongoClient(conn_str, serverSelectionTimeoutMS = 5000)
         try:
@@ -18,11 +18,21 @@ class MongoDB:
             print(f"{Helpers.red}[ERROR] Unable to connect to Mongo server!")
             sys.exit()
 
-        self.database = self.client['Classic-Brawl']
-        self.players = self.database['Players']
+        self.database = self.client['Nova-Brawl']
         
-        self.clubs = self.database['Clubs']
+        self.server_name = server
+        
+        self.servers = self.database['Servers']
+        self.current_server = self.servers[server]
+        
+        self.accounts = self.database['Accounts']
+        
+        
+        self.players = self.current_server['Players']
+        self.clubs = self.current_server['Clubs']
+        
         self.mongo_utils = MongoUtils()
+
 
         self.data = {
             'Name': 'Guest',
@@ -47,7 +57,7 @@ class MongoDB:
             'SelectedSkins': Player.selected_skins,
             'SelectedBrawler': 0,
             'Region': Player.region,
-            'SupportedContentCreator': "Classic Brawl",
+            'SupportedContentCreator': "Nova Brawl",
             'StarPower': Player.starpower,
             'Gadget': Player.gadget,
             'BrawlPassActivated': False,
@@ -73,6 +83,8 @@ class MongoDB:
         self.team_data = {
             
         }
+        
+        
 
     def merge(self, dict1, dict2):
         return (dict1.update(dict2))
@@ -102,7 +114,20 @@ class MongoDB:
 
             return result
 
+    def load_player_account_by_id2(self, id):
+        query = {"ID": id}
+        result = self.mongo_utils.load_document(self.players, query)
 
+        if result:
+            for x in self.data:
+                if x not in result:
+                    self.update_player_account(id, x, self.data[x])
+
+            query = {"ID": id}
+            result = self.mongo_utils.load_document(self.players, query)
+
+            return result
+        
     def load_player_account_by_id(self, id):
         query = {"ID": id}
         result = self.mongo_utils.load_document(self.players, query)
@@ -187,3 +212,28 @@ class MongoDB:
         
     def get_new_id(self):
         return self.players.count_documents({}) + 1
+    
+    def get_new_club_id(self):
+        return self.clubs.count_documents({}) + 1
+    
+    def get_server_name(self, db):
+        return db.server_name
+    
+    def create_new_server(self, server_name, db, last_server_name, id):
+        account_Data = self.load_player_account_by_id(id)
+        print(account_Data)
+        new_server = self.database[server_name]
+        new_server_players = new_server['Players']
+        new_server_clubs = new_server['Clubs']
+        self.account_data = {
+            "id": id,
+            last_server_name: account_Data,
+            "passToken": f"{account_Data['Token']}",
+            "currentRoom": server_name
+        }
+        self.new_player_smth = self.accounts[id]
+        try:
+            self.new_player_smth = self.merge(self.accounts[id], self.account_data)
+        except:
+            self.new_player_smth = self.account_data
+        return [new_server, new_server_players, new_server_clubs, id, self.accounts[id]] 

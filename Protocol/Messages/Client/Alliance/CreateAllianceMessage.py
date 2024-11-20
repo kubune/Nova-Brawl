@@ -43,7 +43,7 @@ class CreateAllianceMessage(Reader):
             "Messages": []
         }
 
-        self.player.club_id = Helpers.randomID(self)
+        self.player.club_id = db.get_new_club_id()
         self.player.club_role = 2
 
         db.create_club(self.player.club_id, data)
